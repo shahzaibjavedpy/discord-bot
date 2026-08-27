@@ -5,11 +5,11 @@ from discord.ext import commands
 import requests
 from dotenv import load_dotenv
 
-# .env file se variables load karna
+# Load environment variables from .env file
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-# Bot intents configure karna
+# Configure bot intents
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -20,20 +20,20 @@ async def on_ready():
     print(f"Logged in as {bot.user} (ID: {bot.user.id})")
     print("------")
 
-# Global Error Handler (Spam aur Cooldown handle karne ke liye)
+# Global Error Handler (to handle spam and cooldowns)
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         embed = discord.Embed(
             title="⏳ Cooldown Active",
-            description=f"Bhai aaram se! Thoda wait kar le. Try again in **{round(error.retry_after, 1)} seconds**.",
+            description=f"Easy there! Please wait a moment. Try again in **{round(error.retry_after, 1)} seconds**.",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed, delete_after=5)
     elif isinstance(error, commands.MissingRequiredArgument):
         embed = discord.Embed(
             title="❌ Missing Argument",
-            description="Aray bhai, command ke sath required details (jaise IP, URL, ya text) dena bhool gaya!",
+            description="Hey buddy, you forgot to include the required details (like IP, URL, or text) with the command!",
             color=discord.Color.red()
         )
         await ctx.send(embed=embed, delete_after=5)
@@ -238,11 +238,11 @@ async def port_scan(ctx, target: str):
     except Exception:
         await ctx.send("I couldn't send you a DM. Please enable your DMs!", embed=embed)
 
-# Bot ko run karne ka code sabse aakhir mein aayega
+# Main entry point to run the bot
 print("Starting bot...") 
 try:
     if not TOKEN:
-        raise ValueError("DISCORD_TOKEN environment variable nahi mili! .env file check karein.")
+        raise ValueError("DISCORD_TOKEN environment variable not found! Please check your .env file.")
     bot.run(TOKEN)
 except Exception as e:
-    print(f"Error aagaya bhai: {e}")
+    print(f"An error occurred: {e}")
